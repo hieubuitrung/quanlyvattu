@@ -35,7 +35,7 @@ var themVatTu = (function () {
                 dataType: 'json',
                 success: function(response) {
                     console.log('Success', response);
-                    var url = `${location.origin}/danh-sach-tai-khoan.html`;
+                    var url = `${location.origin}/qlvt/danh-sach-tai-khoan.html`;
                     $(location).attr("href", url);
                   },
                 error: function(error) {

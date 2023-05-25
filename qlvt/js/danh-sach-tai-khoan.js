@@ -23,24 +23,20 @@ var danhSachTaiKhoan = (function () {
         B.delegate('#capNhatTaiKhoan', 'click', function () {
             let inputs = $('#form-updateTaiKhoan input[type="text"]');
             let img = $('#form-updateTaiKhoan img');
-            let name = inputs[0].value;
-            let ox = inputs[1].value;
-            let oy = inputs[2].value;
-            let bo_phan = inputs[3].value;
-            let qr_string = inputs[4].value;
             let picture = img.attr('src').split('/')[img.attr('src').split('/').length - 1];
-            let qr_id = mol.id;
+            let user_id = mol.id;
 
             // Tạo object mới và gán giá trị cho các thuộc tính
             var obj = {
-                'name': name,
-                'ox': ox,
-                'oy': oy,
-                'bo_phan': bo_phan,
-                'qr_string': qr_string,
                 'picture': picture,
-                'qr_id': qr_id
+                'user_id': user_id,
+                'password': mol.password,
             };
+
+            inputs.map((i, e) => {
+                obj[e.id] = e.value;
+            })
+
 
             const pic = $('#picture')[0];
             const file = pic.files[0];
@@ -49,11 +45,10 @@ var danhSachTaiKhoan = (function () {
                 saveFile(pic, name);
                 obj[pic.id] = name + "." + pic.files[0].name.split(".").pop();
             }
-
             
             $.ajax({
                 method: "POST",
-                url: `http://52.76.57.212:6006/db/item/replace`,
+                url: `http://52.76.57.212:6006/db/user/replace`,
                 data: JSON.stringify(obj),
                 contentType: 'application/json',
                 dataType: 'json',
@@ -80,6 +75,7 @@ var danhSachTaiKhoan = (function () {
 
         B.delegate('.btn-suaTaiKhoan', 'click', function () { 
             mol.id = $(this).attr('data-id');
+            mol.password = $(this).attr('data-password');
             var inputsText = $('#form-updateTaiKhoan input[type="text"]');
             var img = $('#form-updateTaiKhoan img');
             $.ajax({
@@ -109,28 +105,38 @@ var danhSachTaiKhoan = (function () {
                     html.push(`
                         <div class="mb-1">
                             <label class="col-sm-3 col-form-label fw-bold">ID :</label>
-                            <span>${d.username}</span>
+                            <span>${d.user_id}</span>
                         </div>
                         <div class="mb-1">
-                            <label class="col-sm-3 col-form-label fw-bold">Tên vật tư :</label>
+                            <label class="col-sm-3 col-form-label fw-bold">Username :</label>
                             <span>${d.data.username}</span>
                         </div>
                         <div class="mb-1">
-                            <label class="col-sm-3 col-form-label fw-bold">Tọa độ X :</label>
+                            <label class="col-sm-3 col-form-label fw-bold">Tên :</label>
                             <span>${d.data.name}</span>
                         </div>
                         <div class="mb-1">
-                            <label class="col-sm-3 col-form-label fw-bold">Tọa độ Y :</label>
+                            <label class="col-sm-3 col-form-label fw-bold">Email:</label>
                             <span>${d.data.email}</span>
                         </div>
                         <div class="mb-1">
-                            <label class="col-sm-3 col-form-label fw-bold">Chuỗi QR Code :</label>
+                            <label class="col-sm-3 col-form-label fw-bold">Điện thoại :</label>
+                            <span>${d.data.phone_number}</span>
+                        </div>
+                        <div class="mb-1">
+                            <label class="col-sm-3 col-form-label fw-bold">Địa chỉ :</label>
+                            <span>${d.data.dia_chi}</span>
+                        </div>
+                        <div class="mb-1">
+                            <label class="col-sm-3 col-form-label fw-bold">Bộ phận :</label>
                             <span>${d.data.bo_phan}</span>
                         </div>
                         <div class="mb-1">
                             <label class="col-sm-3 col-form-label fw-bold">Hình ảnh :</label>
-                            <img src="./assets/img/taikhoan/${d.data.picture}" alt="Picture ${d.data.name}" width="500">
+                            <img src="./assets/img/taikhoan/${d.data.picture}" alt="Picture ${d.data.name}" width="500" height="300" style="object-fit: cover;">
                         </div>
+
+                        <
                     `)
                     modalBody.html(html.join(''))
                 })
@@ -173,7 +179,7 @@ var danhSachTaiKhoan = (function () {
                 <td>${x.data.bo_phan}</td>
                 <td>${x.data.dia_chi}</td>
                 <td>
-                    <button type="button" data-id='${x.user_id}' class="btn btn-warning btn-suaTaiKhoan" data-bs-toggle="modal" data-bs-target="#modalSuaTaiKhoan">Sửa</button>
+                    <button type="button" data-id='${x.user_id}' data-password='${x.data.password}' class="btn btn-warning btn-suaTaiKhoan" data-bs-toggle="modal" data-bs-target="#modalSuaTaiKhoan">Sửa</button>
                     <button type="button" data-id='${x.user_id}' class="btn btn-danger btn-xoaTaiKhoan" data-bs-toggle="modal" data-bs-target="#modalXoaTaiKhoan">
                         Xóa
                     </button>

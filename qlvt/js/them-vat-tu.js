@@ -23,7 +23,7 @@ var themVatTu = (function () {
 
             data['date'] = currentDateString;
             
-            const id = guid()
+            const id = guid();
             data['qr_id'] = id;
             data['qr_string'] = id;
 
@@ -43,7 +43,7 @@ var themVatTu = (function () {
                 dataType: 'json',
                 success: function(response) {
                     console.log('Success', response);
-                    var url = `${location.origin}/danh-sach-vat-tu.html`;
+                    var url = `${location.origin}/qlvt/danh-sach-vat-tu.html`;
                     $(location).attr("href", url);
                   },
                 error: function(error) {
